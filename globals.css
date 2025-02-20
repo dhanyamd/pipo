@@ -25,7 +25,7 @@ body {
     --primary-80:0 11% 95%;
     --primary-90:0 0% 100% 1;
     --primary-foreground: 0 0% 98%;
-    --secondary:220 3% 35%;
+    --secondary: 240 4.8% 95.9%;
     --secondary-90:228 7% 14%;
     --secondary-foreground: 240 5.9% 10%;
     --muted: 240 4.8% 95.9%;
@@ -67,13 +67,13 @@ body {
     --card-foreground: 0 0% 98%;
     --popover: 240 10% 3.9%;
     --popover-foreground: 0 0% 98%;
-    --primary: 0 11% 95%;
+    --primary: 0 0% 98%;
     --primary-10:228 7% 14%;
     --primary-20:220 7% 17%;
     --primary-80:228 7% 14%;
     --primary-90:225 7% 11%;
     --primary-foreground: 240 5.9% 10%;
-    --secondary: 225 2% 63%; 
+    --secondary: 240 3.7% 15.9%; 
     --secondary-90:210 2% 75%;
     --secondary-foreground: 0 0% 98%;
     --muted: 240 3.7% 15.9%;
