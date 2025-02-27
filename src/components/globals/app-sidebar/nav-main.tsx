@@ -1,5 +1,6 @@
 'use client'
 import { SidebarGroup, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar'
+import { ItemIndicator } from '@radix-ui/react-context-menu'
 import { Clock } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -23,23 +24,25 @@ const NavMain = ({
   return (
      <SidebarGroup className='p-0'>
     <SidebarMenu>
-        <SidebarMenuItem>
-            <SidebarMenuButton
-            asChild     
-            tooltip={'TEST'}
-            className={`${pathname.includes('TEST') && 'bg-background-80'}`}
-            >
-        <Link
-        href={'TEST'}
-        className={`text-lg ${
-            pathname.includes('TEST') && 'font-bold'
-        }`}
-        >
-        <Clock className='text-lg'/>
-        <span>Test sidebar item</span>
-        </Link>
-            </SidebarMenuButton>
-        </SidebarMenuItem>
+   {items.map((item, idx) => (
+         <SidebarMenuItem key={item.title}>
+         <SidebarMenuButton
+         asChild     
+         tooltip={item.title}
+         className={`${pathname.includes(item.url) && 'bg-muted'}`}
+         >
+     <Link
+     href={item.url}
+     className={`text-2xl ${
+         pathname.includes(item.url) && 'font-bold'
+     }`}
+     >
+    <item.icon className='text-3xl'></item.icon>
+     <span className='text-lg'>{item.title} </span>
+     </Link>
+         </SidebarMenuButton>
+     </SidebarMenuItem>
+   ))}
     </SidebarMenu>
      </SidebarGroup>
   )

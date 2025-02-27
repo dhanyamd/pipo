@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Manrope, DM_Sans, Inter } from 'next/font/google'
+import { Manrope, DM_Sans, Inter, Plus_Jakarta_Sans } from 'next/font/google'
 import { ThemeProvider } from "@/providers/theme-provider";
-import { Toaster } from "@/components/ui/toaster";
 import {dark} from "@clerk/themes"
 import {ClerkProvider} from "@clerk/nextjs"
+import { Toaster } from "sonner";
 
 const manrope = Manrope({ subsets: ['latin'] })
-
+const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: "Pipo",
@@ -27,7 +27,7 @@ export default function RootLayout({
     >
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${manrope.style} antialised`}
+        className={`${manrope.className} bg-black`}
         suppressHydrationWarning
       >
         <ThemeProvider

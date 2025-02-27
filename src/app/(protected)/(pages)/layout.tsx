@@ -1,3 +1,4 @@
+import { getRecentProjects } from '@/actions/projects'
 import { onAuthentiatedUser } from '@/actions/user'
 import AppSidebar from '@/components/globals/app-sidebar'
 import NavMain from '@/components/globals/app-sidebar/nav-main'
@@ -8,14 +9,13 @@ type Props = {
     children: React.ReactNode
 }
 const Layout = async ({children} : Props) => {
+    const recentProjects = await getRecentProjects();
     const checkUser = await onAuthentiatedUser()
     if (!checkUser.user) {
         redirect('/sign-in')
     }
   return  <SidebarProvider>
-        <AppSidebar>
-            
-        </AppSidebar>
+        <AppSidebar recentProjects={recentProjects.data || []} user={checkUser.user}/>
     </SidebarProvider>
   
 }

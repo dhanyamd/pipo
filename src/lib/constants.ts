@@ -1,7 +1,7 @@
-import Home from "@/icons/Home";
+import { Home } from "lucide-react";
 // import { Share } from "@/icons/Share";
-import { Template } from "@/icons/Template";
-import { Trash } from "@/icons/Trash";
+import { LucideBookTemplate } from "lucide-react";
+import { Trash } from "lucide-react";
 import { Settings } from "lucide-react";
 import {
   BlankCard,
@@ -63,7 +63,7 @@ export const data = {
     {
       title: "Templates",
       url: "/templates",
-      icon: Template,
+      icon: LucideBookTemplate,
     },
     {
       title: "Trash",
