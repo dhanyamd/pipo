@@ -27,7 +27,7 @@ export default function RootLayout({
     >
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${manrope.className} bg-black`}
+        className={`${manrope.className} antialiased`}
         suppressHydrationWarning
       >
         <ThemeProvider

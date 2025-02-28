@@ -33,12 +33,12 @@ const NavMain = ({
          >
      <Link
      href={item.url}
-     className={`text-2xl ${
+     className={`text-lg ${
          pathname.includes(item.url) && 'font-bold'
      }`}
      >
-    <item.icon className='text-3xl'></item.icon>
-     <span className='text-lg'>{item.title} </span>
+    <item.icon className=''></item.icon>
+     <span className='text-[18px]'> {item.title} </span>
      </Link>
          </SidebarMenuButton>
      </SidebarMenuItem>

@@ -6,6 +6,7 @@ import React from 'react'
 import NavMain from './nav-main'
 import { data } from '@/lib/constants'
 import RecentOpen from './recent-open'
+import NavFooter from './nav-footer'
    
 const AppSidebar = ({
     recentProjects,
@@ -31,10 +32,10 @@ const AppSidebar = ({
         src={'/vivid.png'}
         accessKey='vivid-logo'
         />
-        <AvatarFallback className='bg-background-80 size-16 pl-3 pb-5' >&#9733;</AvatarFallback>
+        <AvatarFallback className='bg-background-80 items-center size-16 pl-3 pb-5' >&#9733;</AvatarFallback>
        </Avatar>
         </div>
-        <span className='truncate text-primary text-3xl font-semibold'>
+        <span className='truncate text-primary text-2xl font-semibold'>
          {' '} 
          Pipo 
         </span>
@@ -45,7 +46,7 @@ const AppSidebar = ({
           <RecentOpen recentProjects={recentProjects} />
         </SidebarContent>
        <SidebarFooter>
-        <NavFooter />
+        <NavFooter prismaUser={user} />
        </SidebarFooter>
     </Sidebar>
   )
