@@ -1,4 +1,5 @@
 import { getAllProjects } from '@/actions/projects'
+import NotFound from '@/components/globals/not-found'
 import React from 'react'
 
 const DashboardPage = async () => {
@@ -8,14 +9,15 @@ const DashboardPage = async () => {
         <div className='flex flex-col-reverse items-start w-full 
         gap-6 sm:flex-row sm:justify-between sm:items-center'>
         <div className='flex flex-col items-start'>
-        <h1 className='text-2xl font-semibold dark:text-primary backdrop-blur-lg'>
+        <h1 className='text-2xl pl-3 font-semibold dark:text-primary backdrop-blur-lg'>
         Projects
         </h1>
-        <p className='text-base font-normal dark:text-gray-500'>
+        <p className='text-base font-normal pl-3 dark:text-gray-500'>
          All of your work in one place
         </p>
         </div>
         </div>
+        <NotFound />
     </div>
   )
 }
