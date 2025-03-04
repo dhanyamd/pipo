@@ -2,7 +2,7 @@ import { Slide, Theme } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import React from 'react'
 type Props = {
-    slide: Slide
+    slide?: Slide
     theme: Theme
 }
 const ThumbnailPreview = ({slide, theme} : Props) => {

@@ -56,3 +56,51 @@ export const getRecentProjects = async () => {
         return {status : 500, error: "Internal server error"}
     }
 }
+
+export const recoverProject = async (projectId: string) => {
+    try {
+        const checkUser = await onAuthentiatedUser()
+        if (checkUser.status !== 200 || !checkUser.user) {
+            return { status: 403, error: 'User not authenticated'}
+        }
+        const updatedProject = await client.projects.update({
+            where: {
+                id: projectId,
+            },
+            data: {
+                isDeleted: false
+            }
+        })
+        if (!updatedProject) {
+            return {status: 500, error: 'Failed to recover project'}
+        }
+        return { status: 200, data: updatedProject }
+    } catch (error) {
+        console.log('🔴Error', error)
+        return {status : 500, error: "Internal server error"}
+    }
+}
+
+export const deleteProject = async(projectId: string) => {
+    try {
+        const checkUser = await onAuthentiatedUser()
+        if (checkUser.status !== 200 || !checkUser.user) {
+            return { status: 403, error: 'User not authenticated'}
+        }
+        const updatedProject = await client.projects.update({
+            where: {
+                id: projectId,
+            },
+            data: {
+                isDeleted: true
+            }
+        })
+        if (!updatedProject) {
+            return {status: 500, error: 'Failed to recover project'}
+        }
+        return { status: 200, data: updatedProject }
+    } catch (error) {
+        console.log('🔴Error', error)
+        return {status : 500, error: "Internal server error"}
+    }
+}

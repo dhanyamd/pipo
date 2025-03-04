@@ -8,16 +8,17 @@ import React, { useState } from 'react'
 import ThumbnailPreview from '../thumbnail-preview'
 import AlertDialogBox from '../alert-dialog'
 import { Button } from '@/components/ui/button'
+import { toast } from 'sonner'
+import { deleteProject, recoverProject } from '@/actions/projects'
 type Props = {
     projectId: string
     title: string 
     createdAt: string 
-    src: string
     isDelete?: boolean 
     themeName: string
     slideData: JsonValue
 }
-const ProjectCard = ({projectId, title, createdAt, themeName,  slideData, src,isDelete} : Props) => {
+const ProjectCard = ({projectId, title, createdAt, themeName,  slideData,isDelete} : Props) => {
 const router = useRouter()
 const [loading, setLoading] = useState(false)
 const [open, setOpen] = useState(false)
@@ -27,6 +28,62 @@ const [open, setOpen] = useState(false)
       router.push(`/prsentation/${projectId}`)
   }
   const theme = themes.find((theme) => theme.name === themeName)
+  const handleRecover = async () => {
+    setLoading(true)
+    if (!projectId) {
+        setLoading(false)
+        toast.error("Error", {
+            description: "Project not found."
+        })
+        return 
+    }
+    try {
+        const res = await recoverProject(projectId)
+        if (res.status !== 200) {
+            toast.error('Oops', {
+                description: res.error || 'Something went wrong'
+            })
+            return 
+        }
+        setOpen(false)
+        router.refresh()
+        toast.success('Success', {
+            description: 'Project recovered successfully'
+        })
+    } catch (error) {
+        toast.error('Oops', {
+            description: 'Something went wrong.Please contact support!'
+        })
+    }
+  }
+  const handleDelete = async () => {
+    setLoading(true)
+    if (!projectId) {
+        setLoading(false)
+        toast.error("Error", {
+            description: "Project not found."
+        })
+        return 
+    }
+    try {
+        const res = await deleteProject(projectId)
+        if (res.status !== 200) {
+            toast.error('Oops', {
+                description: res.error || 'Failed to delete the project'
+            })
+            return 
+        }
+        setOpen(false)
+        router.refresh()
+        toast.success('Success', {
+            description: 'Project deleted successfully'
+        })
+    } catch (error) {
+        toast.error('Oops', {
+            description: 'Something went wrong.Please contact support!'
+        })
+    }
+  }
     return (
         <motion.div
         className={`group w-full flex flex-col gap-y-3 rounded-xl p-3 transition-colors ${
@@ -58,7 +115,7 @@ const [open, setOpen] = useState(false)
         className='bg-green-500 text-white dark:bg-green-600 hover:bg-green-600 dark:hover:bg-green-700'
         loading={loading}
         open={open}
-        //onClick={handleRecover}
+        onClick={handleRecover}
         handleOpen={() => setOpen(!open)}
         >
             <Button
@@ -68,7 +125,23 @@ const [open, setOpen] = useState(false)
             disabled={loading}
             >Recover</Button>
         </AlertDialogBox>
-       ): ''}
+       ): (
+        <AlertDialogBox
+        description='This will recover your project and restore your data.'
+        className='bg-red-500 text-white dark:bg-red-600 hover:bg-red-600 dark:hover:bg-red-700'
+        loading={loading}
+        open={open}
+        onClick={handleDelete}
+        handleOpen={() => setOpen(!open)}
+        >
+            <Button
+            size={'sm'}
+            variant={'ghost'}
+            className='bg-background-80 dark:hover:bg-background-90'
+            disabled={loading}
+            >Delete</Button>
+        </AlertDialogBox>
+       )}
       </div>
         </div>
 
