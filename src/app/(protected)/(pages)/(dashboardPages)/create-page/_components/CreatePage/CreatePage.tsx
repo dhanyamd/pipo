@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {motion} from 'framer-motion'
 import { containerVariants, CreatePageCard, itemVariants } from '@/lib/constants'
 import { Button } from '@/components/ui/button'
@@ -9,6 +9,9 @@ type Props = {
 }
 const CreatePage = ({ onSelectOption} : Props) => {
     const { prompts, setPage } = usePromptStore()
+    useEffect(() => {
+     setPage('create')
+    },[])
   return (
     <motion.div
     variants={containerVariants}
@@ -84,8 +87,8 @@ const CreatePage = ({ onSelectOption} : Props) => {
                 </motion.div>
         ))}
         </motion.div>
-        <RecentPrompts />
-    </motion.div>
+        {prompts.length > 0 && <RecentPrompts />}
+        </motion.div>
   )
 }
 

@@ -1,15 +1,26 @@
 import usePromptStore from '@/store/usePromptStore'
-import React from 'react'
+import React, { use } from 'react'
 import {motion} from 'framer-motion'
 import { containerVariants, itemVariants, timeAgo } from '@/lib/constants'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import useCreativeAIStore from '@/store/useCreativeAI'
+import { toast } from 'sonner'
 type Props = {}
 const RecentPrompts = (props : Props) => {
     const {prompts, setPage} = usePromptStore()
+    const {addMultipleOutlines, setCurrentAiPrompt} = useCreativeAIStore()
     const handleEdit = (id: string) => {
         const prompt = prompts.find((prompt) => prompt.id === id)
-    }
+        if (prompt) {
+            addMultipleOutlines(prompt?.outlines)
+            setCurrentAiPrompt(prompt?.title)
+        } else {
+            toast.error('Error', {
+                description: 'Prompt not found'
+            })
+        }
+    }     
   return (
     <motion.div
     variants={containerVariants}
