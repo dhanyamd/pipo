@@ -1,8 +1,9 @@
 import React, { Suspense } from 'react'
-import CreatePage from './CreatePage/CreatePageSkeleton'
-import RenderPage from './RenderPage'
+import CreatePage from './_components/CreatePage/CreatePageSkeleton'
+import RenderPage from './_components/RenderPage'
 type Props = {}
-const Page = (props : Props) => {
+
+const DashboardPages = (props : Props) => {
   return (
    <main className='w-full h-full pt-6'>
      <Suspense fallback={<CreatePage/>}>
@@ -12,4 +13,4 @@ const Page = (props : Props) => {
   )
 }
 
-export default Page
+export default DashboardPages
