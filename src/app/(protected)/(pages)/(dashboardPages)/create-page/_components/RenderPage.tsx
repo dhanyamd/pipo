@@ -4,10 +4,15 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import React from 'react'
 import CreatePage from './CreatePage/CreatePage'
+import CreativeAI from './GenerateAI/CreativeAI'
 type Props = {}
 const RenderPage = (props : Props) => {
     const router = useRouter()
     const {page, setPage} = usePromptStore()
+
+    const hanleBack = () => {
+        setPage('create')
+    }
    const handleSelectOption = (option: string) => {
     if (option === "template"){
         router.push('/templates')
@@ -24,7 +29,7 @@ const RenderPage = (props : Props) => {
             case 'create-scratch':
                   return <></>
             case 'creative-ai':
-                return <></>
+                return <CreativeAI onBack={hanleBack}/>
             default:
                 null
         }
