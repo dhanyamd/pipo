@@ -2,6 +2,7 @@
 import { OutlineCard } from '@/lib/types'
 import {AnimatePresence, motion} from 'framer-motion'
 import React, { useState } from 'react'
+import Card from './Card'
 type Props = {
     outlines: OutlineCard[]
     editingCard: string | null 
@@ -10,16 +11,18 @@ type Props = {
     addOutline?: (card: OutlineCard) => void 
     onEditChange: (value: string) => void 
     onCardSelect: (id: string) => void 
-    onCardDoubleClick: (id: string) => void
+    onCardDoubleClick: (id: string, title: string) => void
     setEditText: (value: string) => void 
-    setEditingCard: (id: string) => void 
-    addMultipleOutlines: (cards: OutlineCard[]) => void 
+    setEditingCard: (id: string | null) => void 
+    addMultipleOutlines: (cards: OutlineCard[]) => void
+    setSelectedCard: (value : string | null) => void 
 }
 const CardList = ({
  addMultipleOutlines,
  editText,
  editingCard,
  onCardDoubleClick,
+ setSelectedCard,
  onCardSelect,
  onEditChange,
  outlines,
@@ -30,6 +33,21 @@ const CardList = ({
 }: Props) => {
     const [draggedItem, setDraggedItem] = useState<OutlineCard | null>(null)
     const [dragOverIndex, setDragOverIndex] = useState<number | null>(null)
+    const onCardUpdate = (id: string, newTitle: string) => {
+        addMultipleOutlines(
+            outlines.map((card) => 
+            card.id === id ? {...card, title: newTitle} : card)
+        )
+        setEditingCard(null)
+        setSelectedCard(null)
+        setEditText('')
+    }
+    const onCardDelete = (id: string ) => {
+        addMultipleOutlines(outlines 
+            .filter((card) => card.id !== id)
+            .map((card, index) => ({...card, order: index + 1}))
+        )
+    }
     const onDragOver = (e: React.DragEvent, index: number) => {
       e.preventDefault()
       if (!draggedItem) return
@@ -86,7 +104,27 @@ const CardList = ({
         <AnimatePresence>
             {outlines.map((card, index) => (
                 <React.Fragment key={card.id}>
-                    <Card />
+                    <Card 
+                    onDragOver={(e) => onDragOver(e, index)}
+                    card={card}
+                    isEditing={editingCard === card.id}
+                    isSelected={selectedCard === card.id}
+                    editText={editText}
+                    onEditChange={onEditChange}
+                    onEditBlur={() => onCardUpdate(card.id, editText)}
+                    onEditKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                            onCardUpdate(card.id, editText)
+                        }
+                    }}
+                    onCardClick={() => onCardSelect(card.title)}
+                    onCardDoubleClick={() => onCardDoubleClick(card.id, card.title)}
+                    onDeleteClick={() => onCardDelete(card.id)}
+                    dragHnadlers={{
+                        onDragStart: (e) => onDragStart(e, card),
+                        onDragEnd: onDragEnd
+                    }}
+                    />
                 </React.Fragment>
             ))}
         </AnimatePresence>
