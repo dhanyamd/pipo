@@ -8,6 +8,7 @@ import { ChevronLeft, Loader2, RotateCcw } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import useCreativeAIStore from '@/store/useCreativeAI'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import CardList from '../common/CardList'
 type Props = {
     onBack: () => void 
 }
@@ -49,7 +50,7 @@ const CreativeAI = ({onBack} : Props) => {
     className='text-center space-y-2'
     >
         <h1 className='text-4xl font-bold text-primary'>
-            Generate with <span className='text-vivid'>Creative AI</span>
+            Generate with <span className='text-vivid'>Pipo AI</span>
         </h1>
         <p className='text-gray-500'>What would you like to create today?</p>
     </motion.div>
@@ -118,6 +119,8 @@ const CreativeAI = ({onBack} : Props) => {
         )}
       </Button>
     </div>
+
+    <CardList />
    </motion.div>
   )
 }
