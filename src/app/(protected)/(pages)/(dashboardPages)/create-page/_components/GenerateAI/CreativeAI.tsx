@@ -12,6 +12,7 @@ import CardList from '../common/CardList'
 import usePromptStore from '@/store/usePromptStore'
 import RecentPrompts from './RecentPrompts'
 import { toast } from 'sonner'
+import { generateCreativePrompt } from '@/actions/openai'
 type Props = {
     onBack: () => void 
 }
@@ -43,6 +44,7 @@ const CreativeAI = ({onBack} : Props) => {
         return
             }
         setIsGenerating(true)
+        const res = await generateCreativePrompt(currentAiPrompt)
     }
   return (
    <motion.div
@@ -159,7 +161,6 @@ const CreativeAI = ({onBack} : Props) => {
             'Generate'
         )}
         </Button>}
-       
         {prompts.length > 0 && <RecentPrompts />}
    </motion.div>
   )
