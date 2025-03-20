@@ -9,6 +9,9 @@ import { Input } from '@/components/ui/input'
 import useCreativeAIStore from '@/store/useCreativeAI'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import CardList from '../common/CardList'
+import usePromptStore from '@/store/usePromptStore'
+import RecentPrompts from './RecentPrompts'
+import { toast } from 'sonner'
 type Props = {
     onBack: () => void 
 }
@@ -19,10 +22,12 @@ const CreativeAI = ({onBack} : Props) => {
     const [selectedCard, setSelectedCard] = useState<string | null>(null)
     const [editText, setEditText] = useState('')
     const router = useRouter()
+    const {addPrompt, prompts} = usePromptStore()
     const {currentAiPrompt,addMultipleOutlines, addOutline,  resetOutlines, setCurrentAiPrompt, outlines} = useCreativeAIStore()
     const handleBack = () => {
         onBack()
     }
+    const handleGenerate = () => {}
     const resetCards = () => {
         setEditingCard(null)
         setSelectedCard(null)
@@ -30,6 +35,14 @@ const CreativeAI = ({onBack} : Props) => {
 
         setCurrentAiPrompt('')
         resetOutlines()
+    }
+    const generateOutline = async() => {
+        if (currentAiPrompt === ''){
+            toast.error('Error', {
+        description: 'Please enter a prompt to generate an outline.'})
+        return
+            }
+        setIsGenerating(true)
     }
   return (
    <motion.div
@@ -109,6 +122,7 @@ const CreativeAI = ({onBack} : Props) => {
     <div className='w-full flex justify-center items-center'>
       <Button className='font-medium text-lg flex gap-2 items-center'
       disabled={isGenerating}
+      onClick={generateOutline}
       >
         {isGenerating ? (
      <>
@@ -137,6 +151,16 @@ const CreativeAI = ({onBack} : Props) => {
         setEditText(title)
      }}
      />
+     {outlines.length > 0 && <Button className='w-full' disabled={isGenerating} onClick={handleGenerate}>
+        {isGenerating ? (
+         <>
+         <Loader2 className='animate-spin mr-2'/>Generating...</>
+        ): (
+            'Generate'
+        )}
+        </Button>}
+       
+        {prompts.length > 0 && <RecentPrompts />}
    </motion.div>
   )
 }

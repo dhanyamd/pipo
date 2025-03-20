@@ -1,8 +1,9 @@
 'use client'
 import { OutlineCard } from '@/lib/types'
 import {AnimatePresence, motion} from 'framer-motion'
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import Card from './Card'
+import AddCardButton from './AddCardButton'
 type Props = {
     outlines: OutlineCard[]
     editingCard: string | null 
@@ -47,6 +48,47 @@ const CardList = ({
             .filter((card) => card.id !== id)
             .map((card, index) => ({...card, order: index + 1}))
         )
+    }
+    const getDragOverStyles = (cardIndex: number) => {
+        if (dragOverIndex === null || draggedItem === null) return {}
+        if (cardIndex === dragOverIndex) {
+            return {
+                borderTop: '2px solid #000',
+                marginTop: '0.5rem',
+                transition: 'margin 0.2s cubic-beizer(0.25, 0.1, 0.25, 1)'
+            }
+        }else if (cardIndex === dragOverIndex - 1){
+            return {
+                borderBottom: '2px solid #000',
+                marginBottom: '0.5rem',
+                transition: 'margin 0.2s cubic-beizer(0.25, 0.1, 0.25, 1)'
+            }
+        }
+        return {}
+    }
+    const  dragOffsetY = useRef<number>(0)
+    const onDragStart = (e: React.DragEvent, card: OutlineCard) => {
+        setDraggedItem(card)
+        e.dataTransfer.effectAllowed = 'move'
+        const rect = (e.currentTarget as HTMLElement).getBoundingClientRect()
+        dragOffsetY.current = e.clientY - rect.top 
+
+        const draggedE = e.currentTarget.cloneNode(true) as HTMLElement
+        draggedE.style.position = 'absolute'
+        draggedE.style.top = '-100px'
+        draggedE.style.opacity='0.8'
+        draggedE.style.width = `${(e.currentTarget as HTMLElement).offsetWidth}px`
+        document.body.appendChild(draggedE)
+        e.dataTransfer.setDragImage(draggedE, 0, dragOffsetY.current)
+
+        setTimeout(() => {
+            setDragOverIndex(outlines.findIndex((c) => c.id === card.id))
+            document.body.removeChild(draggedE)
+        }, 0)
+    }
+    const onDragEnd = () => {
+        setDraggedItem(null)
+        setDragOverIndex(null)
     }
     const onDragOver = (e: React.DragEvent, index: number) => {
       e.preventDefault()
@@ -124,7 +166,10 @@ const CardList = ({
                         onDragStart: (e) => onDragStart(e, card),
                         onDragEnd: onDragEnd
                     }}
+                    dragOverStyles={
+                        getDragOverStyles(index)}
                     />
+                    <AddCardButton onAddCard={() => onAddCard(index)}/>
                 </React.Fragment>
             ))}
         </AnimatePresence>
