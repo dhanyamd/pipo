@@ -12,15 +12,45 @@ import { Input } from '@/components/ui/input'
 import CardList from '../common/CardList'
 import {v4 as uuid4, v4} from "uuid"
 import { OutlineCard } from '@/lib/types'
+import { toast } from 'sonner'
+import { createProject } from '@/actions/projects'
 type Props = {
     onBack: () => void 
 }
 const ScratchPage = ({ onBack } : Props) => {
     const router = useRouter()
+    const {setProject} = useSlidesStore()
     const[editingCard, setEditingCard] = useState<string | null>(null)
     const [selectedCard, setSelectedCard ] = useState<string | null>(null)
     const {resetOutlines, addMultipleOutlines, addOutline, outlines} = useScratchStore()
     const [editText, setEditText] = useState('')
+    const handleGenerate = async() => {
+        if (outlines.length === 0) {
+            toast.error('Error', {
+                description: 'Please add at least one card to generate slides'
+            })
+            return
+        }
+        const res = await createProject(outlines?.[0]?.title, outlines)
+        if (res.status !== 200 ) {
+            toast.error('Error', {
+                description: res.error || 'Failed to create project'
+            })
+            return
+        }
+        if(res.data) {
+            setProject(res.data)
+            resetOutlines()
+            toast.success('Success',{
+               description: 'Project created successfully!'
+            })
+            router.push(`/presentation/${res.data.id}/select-theme`)
+        } else {
+            toast.error('Error', {
+                description: 'Failed to create project successfully!'
+            })
+        }
+    }
     const handleAddCard = () => {
         const newCard: OutlineCard = {
             id: v4(),
@@ -125,6 +155,14 @@ const ScratchPage = ({ onBack } : Props) => {
         variant="secondary"
         className='w-full bg-primary-10'
         >Add Card</Button>
+        {outlines.length > 0 && (
+            <Button
+            className='w-full' 
+            onClick={handleGenerate}
+            >
+                Generate PPT
+            </Button>
+        )}
         </motion.div>
     )
 }
