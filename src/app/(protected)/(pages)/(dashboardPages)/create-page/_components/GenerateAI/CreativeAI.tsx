@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {motion} from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import { containerVariants, itemVariants } from '@/lib/constants'
@@ -46,6 +46,10 @@ const CreativeAI = ({onBack} : Props) => {
         setIsGenerating(true)
         const res = await generateCreativePrompt(currentAiPrompt)
     }
+    useEffect(() => {
+        setNoOfCards(outlines.length)
+
+    },[outlines.length])
   return (
    <motion.div
    className='space-y-6 w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8'

@@ -13,7 +13,7 @@ import CardList from '../common/CardList'
 import {v4 as uuid4, v4} from "uuid"
 import { OutlineCard } from '@/lib/types'
 import { toast } from 'sonner'
-import { createProject } from '@/actions/projects'
+import { createProject } from '@/actions/projects' 
 type Props = {
     onBack: () => void 
 }

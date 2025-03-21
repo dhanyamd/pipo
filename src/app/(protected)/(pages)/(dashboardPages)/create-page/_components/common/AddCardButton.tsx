@@ -36,9 +36,9 @@ const AddCardButton = ({onAddCard} : Props) => {
                 onClick={onAddCard}
                 aria-label='Add new card'
                 >
-                    <Plus className='h-4 w-4 text-black'/>
-                    <div className='w-[40%] h-{1px] bg-primary'/>
+                    <Plus className='h-4 w-4 flex items-center text-black'/>
                 </Button>
+                <div className='w-[40%] h-[1px] bg-primary'/>
             </motion.div>
         ) : ''}
     </AnimatePresence>

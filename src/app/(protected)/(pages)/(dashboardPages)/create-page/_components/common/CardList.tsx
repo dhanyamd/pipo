@@ -34,6 +34,23 @@ const CardList = ({
 }: Props) => {
     const [draggedItem, setDraggedItem] = useState<OutlineCard | null>(null)
     const [dragOverIndex, setDragOverIndex] = useState<number | null>(null)
+    const onAddCard = (index? : number) => {
+        const newCard: OutlineCard = {
+            id: Math.random().toString(36).substring(2,9),
+            title: editText || 'New Section',
+            order: (index !== undefined ? index + 1 : outlines.length) + 1
+        }
+        const updatedCards = index !== undefined ? [
+            ...outlines.slice(0, index + 1),
+            newCard,
+            ...outlines.slice(index + 1)
+            .map((card) => ({...card, order: card.order + 1}))
+        ] : [
+            ...outlines, newCard
+        ]
+        addMultipleOutlines(updatedCards)
+        setEditText('')
+    }
     const onCardUpdate = (id: string, newTitle: string) => {
         addMultipleOutlines(
             outlines.map((card) => 
