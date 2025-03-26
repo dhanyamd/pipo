@@ -134,3 +134,22 @@ export const createProject = async(title: string, outlines: OutlineCard[]) => {
     return {status : 500, error: "Internal server error"}
   }
 }
+
+export const getProjectById = async (projectId: string) => {
+    try {
+        const checkedUser = await onAuthentiatedUser()
+        if (checkedUser.status !== 200 || !checkedUser.user){
+          return { status: 403, error: 'User not authenticated'}
+        }
+        const project = await client.projects.findFirst({
+            where: { id : projectId }
+        })
+        if(!project) {
+            return { status: 404, error: 'Project not found' }
+        }
+        return { status: 200, data: project}
+    } catch (error) {
+        console.log('🔴Error', error)
+        return {status : 500, error: "Internal server error"}
+    }
+}
