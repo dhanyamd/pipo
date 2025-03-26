@@ -6,6 +6,7 @@ import { useAnimation } from 'framer-motion'
 import { Theme } from '@/lib/types'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft } from 'lucide-react'
+import ThemeCard from './ThemeCard'
 type Props = {}
 const ThemePreview = (props : Props) => {
     const params = useParams()
@@ -140,11 +141,26 @@ const ThemePreview = (props : Props) => {
             Back
         </Button>
         <div className='w-full flex justify-center items-center relative flex-grow'>
-            
+            <ThemeCard 
+            title='Quick Start'
+            description='Get up and running in no time'
+            content={leftCardContent}
+            variant='left'
+            theme={selectedTheme}
+            controls={controls}
+            />
+              <ThemeCard 
+            title='Main Preview'
+            description='This is the main theme preview card'
+            content={mainCardContent}
+            variant='main'
+            theme={selectedTheme}
+            controls={controls}
+            />
         </div>
     </div>
 </div>
-
+<ThemePicker />
         </div>
     )
 }
