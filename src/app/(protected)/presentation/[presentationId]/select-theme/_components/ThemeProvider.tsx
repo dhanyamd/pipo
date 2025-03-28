@@ -161,7 +161,11 @@ const ThemePreview = (props : Props) => {
         </div>
     </div>
 </div>
-
+      <ThemePicker 
+      //onThemeSelect={}
+      selectedTheme={selectedTheme}
+      themes={themes}
+      />
         </div>
     )
 }

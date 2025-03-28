@@ -3,7 +3,7 @@ import { Theme } from '@/lib/types'
 import { AnimationControls, motion } from 'framer-motion'
 import React from 'react'
 import Image from 'next/image'
-import photo from '@/components/photo.jpg'
+import photo from '@/components/photo2.jpg'
 type Props = {
     title: string 
     description: string 
