@@ -7,6 +7,8 @@ import { Theme } from '@/lib/types'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft } from 'lucide-react'
 import ThemeCard from './ThemeCard'
+import ThemePicker from './ThemePicker'
+import { themes } from '@/lib/constants'
 type Props = {}
 const ThemePreview = (props : Props) => {
     const params = useParams()
@@ -80,7 +82,7 @@ const ThemePreview = (props : Props) => {
     variant="outline"
         className="h-12 px-6 text-lg font-medium"
         style={{
-            backgroundColor: selectedTheme.accentColor,
+            backgroundColor: selectedTheme.gradientBackground,
             color: selectedTheme.fontColor,
         }}
     >
@@ -123,7 +125,6 @@ const ThemePreview = (props : Props) => {
         <div className='h-screen w-full flex' 
         style={{ backgroundClip: selectedTheme.backgroundColor, color: selectedTheme.accentColor, fontFamily: selectedTheme.fontFamily}}
         >
-            ```
 <div className="flex-grow overflow-y-auto">
     <div className="p-12 flex flex-col items-center min-h-screen">
         <Button
@@ -160,7 +161,7 @@ const ThemePreview = (props : Props) => {
         </div>
     </div>
 </div>
-<ThemePicker />
+
         </div>
     )
 }
