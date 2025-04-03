@@ -1,3 +1,4 @@
+import { generateLayouts } from '@/actions/openai'
 import { Button } from '@/components/ui/button'
 import { Theme } from '@/lib/types'
 import { useSlidesStore } from '@/store/useSlideStore'
@@ -20,6 +21,19 @@ const ThemePicker = ({onThemeSelect, selectedTheme, themes} : Props) => {
         toast.error('Error', {
           description: 'Please select a theme'
         })
+        return
+      }
+      if (project?.id === '') {
+        toast.error('Error', {
+          description: 'Please create a project'
+        })
+        router.push('/create-page')
+        return
+      }
+      try {
+        const res = await generateLayouts()
+      } catch (error) {
+        
       }
     }
   return (
@@ -40,7 +54,9 @@ const ThemePicker = ({onThemeSelect, selectedTheme, themes} : Props) => {
           Choose from our curated collection or generate a custom theme
         </p>
         </div>
-        <Button className='w-full h-12 text-lg font-medium shadow-lg hover:shadow-xl transition-all duration-300'
+        <Button 
+        onClick={handleGenerateLayouts}
+        className='w-full h-12 text-lg font-medium shadow-lg hover:shadow-xl transition-all duration-300'
         style={{ 
           backgroundColor: selectedTheme.accentColor,
           color: '#ffffff'
