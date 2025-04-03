@@ -7,6 +7,10 @@ import { useTheme } from 'next-themes'
 import { redirect, useParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { toast } from 'sonner'
+import { DndProvider } from 'react-dnd'
+//@ts-ignore
+import { HTML5Backend } from 'react-dnd-html'
+import Navbar from './_components/Navbar'
 type Props = {}
 const Page = (props : Props) => {
     const params = useParams()
@@ -44,11 +48,20 @@ const Page = (props : Props) => {
             </div>
         )
     }
-  return (
-    <div>
-      
+  return <DndProvider backend={HTML5Backend}>
+    <div className='min-h-screen flex flex-col'>
+        <Navbar presentationId={params.presentationId as string}/>
+        <div 
+        className='flex-1 flex overflow-hidden pt-16'
+        style={{
+            color: currentTheme.accentColor,
+            fontFamily: currentTheme.fontFamily,
+            backgroundColor: currentTheme,
+            backgroundColor
+        }}
+        ></div>
     </div>
-  )
+  </DndProvider>
 }
 
 export default Page
