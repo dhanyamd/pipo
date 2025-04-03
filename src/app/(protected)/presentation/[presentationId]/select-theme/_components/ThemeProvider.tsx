@@ -91,14 +91,14 @@ const ThemePreview = (props : Props) => {
 </div>
         </div>
     );
-
+  
     const rightCardContent = (
         <div className='space-y-4'>
         <div className='rounded-xl p-6' 
         style={{ backgroundColor: selectedTheme.accentColor + '10'}}
         >
      < h3
-      className = " text - xl font - semibold mb - 4 "
+      className = " text-xl font-semibold mb-4 "
       style = { { color : selectedTheme.accentColor } }>
       Theme Features
 </ h3 >
@@ -121,9 +121,13 @@ const ThemePreview = (props : Props) => {
         </Button>
         </div>
     )
+    const applyTheme = (theme: Theme) => {
+        setSelectedTheme(theme)
+        setCurrentTheme(theme)
+    }
     return (
         <div className='h-screen w-full flex' 
-        style={{ backgroundClip: selectedTheme.backgroundColor, color: selectedTheme.accentColor, fontFamily: selectedTheme.fontFamily}}
+        style={{ backgroundColor: selectedTheme.backgroundColor, color: selectedTheme.accentColor, fontFamily: selectedTheme.fontFamily}}
         >
 <div className="flex-grow overflow-y-auto">
     <div className="p-12 flex flex-col items-center min-h-screen">
@@ -141,7 +145,8 @@ const ThemePreview = (props : Props) => {
             <ArrowLeft className="mr-2 h-5 w-5" />
             Back
         </Button>
-        <div className='w-full flex justify-center items-center relative flex-grow'>
+        <div className='w-full flex justify-center items-center relative flex-grow' 
+>
             <ThemeCard 
             title='Quick Start'
             description='Get up and running in no time'
@@ -158,11 +163,19 @@ const ThemePreview = (props : Props) => {
             theme={selectedTheme}
             controls={controls}
             />
+                   <ThemeCard 
+            title='Theme Features'
+            description='Discover what our themes can do'
+            content={rightCardContent}
+            variant='right'
+            theme={selectedTheme}
+            controls={controls}
+            />
         </div>
     </div>
 </div>
       <ThemePicker 
-      //onThemeSelect={}
+      onThemeSelect={applyTheme}
       selectedTheme={selectedTheme}
       themes={themes}
       />

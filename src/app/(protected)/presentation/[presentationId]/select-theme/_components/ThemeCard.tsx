@@ -3,7 +3,7 @@ import { Theme } from '@/lib/types'
 import { AnimationControls, motion } from 'framer-motion'
 import React from 'react'
 import Image from 'next/image'
-import photo from '@/components/photo2.jpg'
+import photo from '@/components/ui/img.jpg'
 type Props = {
     title: string 
     description: string 
@@ -70,8 +70,9 @@ const ThemeCard = ({content, controls, description,theme, title, variant} : Prop
   animate={controls}
   variants={variants[variant]}
   className="absolute w-full max-w-3xl"
-  style={{ zIndex: variant === 'main' ? 10 : 0 }}
->
+  style={{ zIndex: variant === 'main' ? 10 : 0,
+  }}
+> 
   <Card
     className="h-full shadow-2xl backdrop-blur-sm"
     style={{
@@ -79,7 +80,7 @@ const ThemeCard = ({content, controls, description,theme, title, variant} : Prop
       border: `1px solid ${theme.accentColor}20`,
     }}
   >
-    <div className="flex flex-col md:flex-row">
+    <div className="flex flex-col md:flex-row"> 
       <CardContent className="flex-1 p-8 space-y-6">
         <div className="space-y-3">
           <h2 className='text-3xl font-bold tracking-tight' style={{ color: theme.accentColor}}>{title}</h2>

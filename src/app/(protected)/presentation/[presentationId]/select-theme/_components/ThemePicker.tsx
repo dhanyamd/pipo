@@ -1,9 +1,12 @@
+'use client'
 import { generateLayouts } from '@/actions/openai'
 import { Button } from '@/components/ui/button'
+import { ScrollArea } from '@/components/ui/scroll-area'
 import { Theme } from '@/lib/types'
 import { useSlidesStore } from '@/store/useSlideStore'
+import { motion } from 'framer-motion'
 import { Loader2, Wand2 } from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import { toast } from 'sonner'
 type Props = {
@@ -13,6 +16,7 @@ type Props = {
 }
 const ThemePicker = ({onThemeSelect, selectedTheme, themes} : Props) => {
     const router = useRouter() 
+    const params = useParams()
     const {currentTheme,project, setSlides} = useSlidesStore()
     const [loading, setLoading] = useState(false)
     const handleGenerateLayouts = async () => {
@@ -31,9 +35,23 @@ const ThemePicker = ({onThemeSelect, selectedTheme, themes} : Props) => {
         return
       }
       try {
-        const res = await generateLayouts()
+        const res = await generateLayouts(params.presentationId as string, 
+          currentTheme.name
+        )
+        if (res?.status !== 200 && !res?.data) {
+          throw new Error('Failed to generate layouts')
+        }
+        toast.success('Success', {
+          description: 'Layouts generated successfully',
+        })
+        router.push(`/presentation/${project?.id}`)
+        setSlides(res.data)
       } catch (error) {
-        
+        toast.error('Error', {
+          description: 'Please create a project'
+        })
+      } finally {
+        setLoading(false)
       }
     }
   return (
@@ -74,6 +92,44 @@ const ThemePicker = ({onThemeSelect, selectedTheme, themes} : Props) => {
           )}
         </Button>
       </div>
+      <ScrollArea className="flex-grow px-8 pb-8">
+  <div className="grid grid-cols-1 gap-4">
+    {themes.map((theme) => (
+      <motion.div
+        key={theme.name}
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
+      >
+        <Button
+          onClick={() => {
+            onThemeSelect(theme)
+          }}
+          className="flex flex-col items-center justify-start p-6 w-full h-auto"
+          style={{
+            fontFamily: theme.fontFamily,
+            color: theme.fontColor,
+            background: theme.gradientBackground || theme.backgroundColor
+          }}
+        >
+          <div className='w-full flex items-center justify-between'>
+            <span className='text-xl font-bold'>{theme.name}</span>
+            <div className='w-3 h-3 rounded-full' style={{
+              backgroundColor: theme.accentColor
+            }}/>
+          </div>
+          <div className='space-y-1 w-full'>
+            <div className='text-2xl font-bold'
+            style={{ color: theme.accentColor}}
+            >Title</div>
+          </div>
+          <div className='text-base opacity-80'>Body &{' '}
+            <span style={{color: theme.accentColor}}>link</span>
+          </div>
+        </Button>
+      </motion.div>
+    ))}
+  </div>
+</ScrollArea>
     </div>
   )
 }

@@ -1,7 +1,7 @@
 'use server'
 
 import { client } from "@/lib/prisma";
-import { ContentType, Slide } from "@/lib/types";
+import { ContentItem, ContentType, Slide } from "@/lib/types";
 import { currentUser } from "@clerk/nextjs/server";
 import OpenAI from "openai";
 import {v4 as uuidv4} from "uuid"
@@ -494,6 +494,52 @@ const replaceImagePlaceholders = async (layout: Slide) => {
         )
     }
 }
+const findImageComponents = (layout: ContentItem): ContentItem[] => {
+    const images = []
+    if (layout.type === 'image') {
+      images.push(layout)
+    }
+  
+    if (Array.isArray(layout.content)) {
+      layout.content.forEach((child) => {
+        images.push(...findImageComponents(child as ContentItem))
+      })
+    } else if (layout.content && typeof layout.content === 'object') {
+      images.push(...findImageComponents(layout.content))
+    }
+    return images
+  }
+
+  const generateImageUrl = async (prompt: string): Promise<string>=> {
+    try {
+      const improvedPrompt = `
+  Create a highly realistic, professional image based on the following description. The image should look as if captured in real life, with attention to detail, lighting, and texture.
+  
+  Description: ${prompt}
+  
+  Important Notes:
+  - The image must be in a photorealistic style and visually compelling.
+  - Ensure all text, signs, or visible writing in the image are in English.
+  - Pay special attention to lighting, shadows, and textures to make the image as lifelike as possible.
+  - Avoid elements that appear abstract, cartoonish, or overly artistic. The image should be suitable for professional presentations.
+  - Focus on accurately depicting the concept described, including specific objects, environment, mood, and context. Maintain 
+     relevance to the description provided.
+
+     Example Use Cases: Business presentations, educational slides, proffesional designs.
+  `
+    const dalleResponse = await openai.images.generate({
+        prompt: improvedPrompt,
+        n: 1,
+        size: '1024x1024'
+    })
+    console.log('🟢Image generated successfully:', dalleResponse.data[0].url)
+    return dalleResponse.data[0]?.url || 'https://via.placeholder.com/1024'
+    } catch (error) {
+      console.error('Failed to generate image:', error)
+      return 'https://via.placeholder.com/1024'
+    }
+  }
+
 export const generateLayoutsJSON = async (outlineArray: string[]) => {
     const prompt = `You are a highly creative AI that generates JSON-based layouts for presentations. I will provide you with an array of outlines, and for each outline, you must generate a unique and creative layout. Use the existing layouts as examples for structure and design, and generate unique designs based on the provided outline.
 
@@ -552,7 +598,12 @@ try {
         console.log('🔴 ERROR:', error) 
         throw new Error('Invalid JSON formate recieved from AI')
       }
-} catch (error) {} 
+      console.log('🟢 Layouts generated successfully') 
+      return { status: 200, data: jsonResponse}
+} catch (error) {
+    console.error('🔴ERROR', error) 
+    return { status: 500, error: 'Internal server error'}
+} 
 }
 
 
@@ -583,14 +634,14 @@ export const generateLayouts = async (projectId: string, theme: string) => {
         return { status: 404, error: 'Project does not have any outlines'}
     }
     const layouts = await generateLayoutsJSON(project.outlines)
-    if (layouts.status !== 200) {
+    if (layouts?.status !== 200) {
         return layouts
     }
     await client.projects.update({
         where: { id: projectId },
-        data: {slides: layouts.data, themeName: theme}
+        data: {slides: layouts?.data, themeName: theme}
     })
-    return {status: 200, data: layouts.data}
+    return {status: 200, data: layouts?.data}
   } catch (error) {
     console.log('🔴Error', error)
     return {status : 500, error: "Internal server error", data: []}
