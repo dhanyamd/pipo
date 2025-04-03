@@ -537,7 +537,7 @@ export const themes: Theme[] = [
   {
     name: "Minimalist Mono",
     fontFamily: "'IBM Plex Mono', monospace",
-    fontColor: "#000000",
+    fontColor: "#ffffff",
     backgroundColor: "#ffffff",
     slideBackgroundColor: "#f5f5f5",
     accentColor: "#000000",
