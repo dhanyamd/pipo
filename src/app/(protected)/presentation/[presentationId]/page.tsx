@@ -11,6 +11,7 @@ import { DndProvider } from 'react-dnd'
 //@ts-ignore
 import { HTML5Backend } from 'react-dnd-html'
 import Navbar from './_components/Navbar'
+import LayoutPreview from './_components/editor-sidebar/leftsidebar/LayoutPreview'
 type Props = {}
 const Page = (props : Props) => {
     const params = useParams()
@@ -59,7 +60,9 @@ const Page = (props : Props) => {
             backgroundColor: currentTheme,
             backgroundColor
         }}
-        ></div>
+        >
+            <LayoutPreview />
+        </div>
     </div>
   </DndProvider>
 }
