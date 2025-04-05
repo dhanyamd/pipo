@@ -2,6 +2,7 @@ import { Slide, Theme } from '@/lib/types'
 import { Projects } from '@prisma/client'
 import {create} from 'zustand'
 import {persist} from 'zustand/middleware'
+import { v4 as uuid4 } from 'uuid'
 
 export interface SlideState {
     slides: Slide[]
@@ -9,9 +10,12 @@ export interface SlideState {
     setProject: (id: Projects) => void 
     setSlides: (slides: Slide[]) => void 
     currentTheme : Theme 
+    currentSlide: number 
+    removeSlide: (id: string) => void 
     setCurrentTheme: (theme: Theme) => void 
     getOrderedSlides: () => Slide[]
     reorderSlides: (fromIndex: number, toIndex: number) => void 
+    addSlideAtIndex: (slide: Slide, index: number) => void 
 }
 const defaultTheme: Theme = {
     name: 'Default',
@@ -34,6 +38,20 @@ export const useSlidesStore = create(
         const state = get()
         return [...state.slides].sort((a,b) => a.slideOrder - b.slideOrder)
       },
+       removeSlide: (id) => 
+        set((state) => ({
+            slides: state.slides.filter((slide) => slide.id !== id),
+        })),
+        addSlideAtIndex: (slide: Slide, index: number) => 
+            set((state) => {
+                const newSlides = [...state.slides] 
+                newSlides.splice(index, 0, {...slide, id: uuid4()})
+                newSlides.forEach((s, i) => {
+                    s.slideOrder = i 
+                })
+                return { slides: newSlides, currentSlide: index}
+            }),
+            currentSlide: 0,
       reorderSlides: (fromIndex: number, toIndex: number)=> {
         set((state) => {
             const newSlides = [...state.slides]
