@@ -8,6 +8,10 @@ import { NavigationMenuViewportProps } from '@radix-ui/react-navigation-menu'
 import React, { useEffect, useRef, useState } from 'react'
 import { useDrag, useDrop } from 'react-dnd'
 import {v4 as uuid4} from 'uuid'
+import {MasterRecursiveComponent} from './MasterRecursiveComponent'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import { Button } from '@/components/ui/button'
+import { EllipsisVertical, Trash } from 'lucide-react'
 type Props = {
     isEditable: boolean 
 }
@@ -88,6 +92,13 @@ export const DraggableSlide: React.FC<DraggableSlideProps> = ({
         }),
         canDrag: isEditable
     })
+    const handleContentChange = (contentId: string, newContent: string | string[] | string[][]) => {
+        console.log('Content changed', slide, contentId, newContent)
+        if (isEditable) {
+            updateContentItem(slide.id, contentId, newContent)
+        }
+    }
+  
     const {currentSlide, currentTheme, setCurrentSlide, updateContentItem} = useSlidesStore()
     return(
         <div 
@@ -103,8 +114,41 @@ export const DraggableSlide: React.FC<DraggableSlideProps> = ({
          onClick={() => setCurrentSlide(index)}
         >
             <div className='h-full w-full flex-grow overflow-hidden'>
-                <MasterRecursiveComponent/>
+                <MasterRecursiveComponent 
+                content={slide.content}
+                isPreview={false}
+                slideId={slide.id}
+                isEditable={isEditable} 
+                onContentChange={handleContentChange}
+                />
             </div>
+            {isEditable && (
+  <Popover>
+    <PopoverTrigger
+      asChild
+      className="absolute top-2 left-2"
+    >
+      <Button
+        size="sm"
+        variant="outline"
+      >
+        <EllipsisVertical className="w-5 h-5" />
+        <span className="sr-only">Slide options</span>
+      </Button>
+    </PopoverTrigger>
+   <PopoverContent className="w-fit p-0">
+    <div className='flex space-x-2'>
+        <Button
+        variant="ghost"
+        onClick={() => handleDelete(slide.id)}
+        >
+            <Trash className='w-5 h-5 text-red-500'/>
+            <span className='sr-only'>Delete slide</span>
+        </Button>
+    </div>
+   </PopoverContent>
+  </Popover>
+)}
         </div>
     )
 }
@@ -126,14 +170,13 @@ const Editor = ({isEditable} : Props) => {
             reorderSlides(dragIndex, hoverIndex)
         }
     }
-    useEffect(() => {
-        if (slideRefs.current[currentSlide]) {
-            slideRefs.current[currentSlide]?.scrollIntoView({
-                behavior: 'smooth',
-                block: 'center',
-            })
+
+    const handleDelete = (id : string) => {
+        if (isEditable) {
+            console.log('Deleting', id)
+            removeSlide(id)
         }
-    }, [currentSlide])
+    }
     const handleDrop = (
         item: {
             type: string 
@@ -154,6 +197,17 @@ const Editor = ({isEditable} : Props) => {
             moveSlide(item.index, dropIndex)
         }
     } 
+    useEffect(() => {
+        if (slideRefs.current[currentSlide]) {
+            slideRefs.current[currentSlide]?.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center',
+            })
+        }
+    }, [currentSlide])
+    useEffect(() => {
+        if (typeof window!== "undefined") setLoading(false)
+    }, [])
   return (
     <div className='flex-1 flex flex-col h-full max-w-3xl mx-auto px-4 mb-20'>
         {loading ? (
@@ -172,7 +226,13 @@ const Editor = ({isEditable} : Props) => {
                     />)}
                     {orderedSlides.map((slide, index) => (
                         <React.Fragment key={slide.id || index}>
-                            <DraggableSlide />
+                            <DraggableSlide 
+                            slide={slide}
+                            index={index}
+                            moveSlide={moveSlide}
+                            handleDelete={handleDelete}
+                            isEditable={isEditable}
+                            />
                         </React.Fragment>
                     ))}
                 </div>
