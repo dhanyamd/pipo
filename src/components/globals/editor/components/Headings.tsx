@@ -27,11 +27,10 @@ const createHeading = (displayName: string, defaultClassName: string) => {
             const previewClassName = isPreview ? 'text-xs' : ''
 
             return (
-              //@ts-ignore
+                //@ts-ignore
                 <textarea
                 className={cn(
-                    `w-full bg-transparent ${defaultClassName} ${previewClassName} 
-                    font-normal text-gray-900 placeholder:text-gray-300 focus:outline-none 
+                    `w-full bg-transparent ${defaultClassName} ${previewClassName} font-normal text-gray-900 placeholder:text-gray-300 focus:outline-none 
                    resize-none overflow-hidden leading-tight`, className
                 )}
                 style={{
@@ -50,15 +49,14 @@ const createHeading = (displayName: string, defaultClassName: string) => {
                 } }
                 readOnly={isPreview}
                 {...props}
-                >
-                    
-                </textarea>
+                />
             )
         }
     )
     Heading.displayName = displayName 
     return Heading 
 }
+
 const Heading1 = createHeading('Heading1', 'text-4xl')
 const Heading2 = createHeading('Heading2', 'text-3xl')
 const Heading3 = createHeading('Heading3', 'text-2xl') 
