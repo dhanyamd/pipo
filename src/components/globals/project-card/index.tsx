@@ -25,7 +25,7 @@ const [open, setOpen] = useState(false)
   const {setSlides} = useSlidesStore()
     const handleNavigation = () => {
       setSlides(JSON.parse(JSON.stringify(slideData)))
-      router.push(`/prsentation/${projectId}`)
+      router.push(`/presentation/${projectId}`)
   }
   const theme = themes.find((theme) => theme.name === themeName)
   const handleRecover = async () => {
@@ -97,7 +97,7 @@ const [open, setOpen] = useState(false)
     >
     <ThumbnailPreview
     theme={theme!}
-   // slide={JSON.parse(JSON.stringify(slideData))?.[0]}
+    slide={JSON.parse(JSON.stringify(slideData))?.[0]}
     />
     </div>
     <div className='w-full'>
