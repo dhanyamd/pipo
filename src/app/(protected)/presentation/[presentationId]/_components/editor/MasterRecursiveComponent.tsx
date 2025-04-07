@@ -7,6 +7,7 @@ import React, { useCallback } from 'react'
 import Dropzonee from './Dropzone'
 import Paragraph from './Paragraph'
 import TableComponent from './TableComponent'
+import ColumnComponent from './ColumnComponent'
 type MasterRecursiveProps = {
     content: ContentItem 
     onContentChange: (
@@ -120,9 +121,19 @@ const ContentRenderer: React.FC<MasterRecursiveProps> = React.memo(({
                 <motion.div
                 {...animationProps}
                 className='w-full h-full'
-                ></motion.div>
+                >
+                  <ColumnComponent 
+                  content={content.content as ContentItem[]}
+                  className={content.className}
+                  onContentChange={onContentChange}
+                  slideId={slideId}
+                  isPreview={isPreview}
+                  isEditable={isEditable}
+                  />
+                </motion.div>
               )
              }
+             return null
            case 'column' : 
            if (Array.isArray(content.content)) {
             return (

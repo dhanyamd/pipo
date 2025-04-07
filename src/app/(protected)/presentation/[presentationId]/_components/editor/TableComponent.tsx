@@ -1,7 +1,7 @@
 'use client'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable'
 import { useSlidesStore } from '@/store/useSlideStore'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 interface TableComponentProps {
     content: string[][] 
     onChange: (newContent: string[][]) => void 
@@ -42,6 +42,11 @@ const TableComponent = ({
         newSizes[index] = newSize
         setColSizes(newSizes)
     }
+    useEffect(() => {
+        setRowSizes(new Array(tableData.length).fill(100/tableData.length))
+    }, [tableData])
+    setColSizes(new Array(tableData[0].length).fill(100/tableData[0].length))
+
     if (isPreview)
       return (
         <div className="w-full overflow-x-auto text-xs">
