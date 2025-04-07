@@ -6,6 +6,7 @@ import { motion } from 'framer-motion'
 import React, { useCallback } from 'react'
 import Dropzonee from './Dropzone'
 import Paragraph from './Paragraph'
+import TableComponent from './TableComponent'
 type MasterRecursiveProps = {
     content: ContentItem 
     onContentChange: (
@@ -95,6 +96,33 @@ const ContentRenderer: React.FC<MasterRecursiveProps> = React.memo(({
               <Paragraph {...commonProps}/>
             </motion.div>
            )
+           case 'table': 
+           return (
+            <motion.div
+            {...animationProps}
+            className='w-full h-full'
+            >
+              <TableComponent 
+              content={content.content as string[][]}
+              onChange={(newContent) => 
+                onContentChange(content.id, newContent !== null ? newContent : '')
+              }
+              initialRowSize={content.initialRows}
+              initialColSize={content.initialColumns}
+              isPreview={isPreview}
+              isEditable={isEditable}
+              />
+            </motion.div>
+           )
+           case 'resizable-column' : 
+             if (Array.isArray(content.content)) {
+              return (
+                <motion.div
+                {...animationProps}
+                className='w-full h-full'
+                ></motion.div>
+              )
+             }
            case 'column' : 
            if (Array.isArray(content.content)) {
             return (

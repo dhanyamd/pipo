@@ -25,13 +25,13 @@ export const generateCreativePrompt = async (userPrompt: string) => {
 
                                  Return the output in the following JSON format:
                                  {
-                                                                                           "outlines": [
-                                                                                              "Point 1",
-                                                                                              "Point 2",
-                                                                                              "Point 3",
-                                                                                              "Point 4",
-                                                                                              "Point 5",
-                                                                                                "Point 6"
+                                     "outlines": [
+                                  "Point 1",
+                                  "Point 2",
+                                   "Point 3",
+                                    "Point 4",
+                                     "Point 5",
+                                      "Point 6"
                                                  ]
                                  }
     Ensure that the JSON is valid and properly formatted. Do not include any other text or explanations outside JSON             
