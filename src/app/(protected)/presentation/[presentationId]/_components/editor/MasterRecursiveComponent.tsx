@@ -8,6 +8,9 @@ import Dropzonee from './Dropzone'
 import Paragraph from './Paragraph'
 import TableComponent from './TableComponent'
 import ColumnComponent from './ColumnComponent'
+import CustomImage from './CustomImage'
+import BlockQuote from './BlockQuote'
+import NumberedList from './NumberedList'
 type MasterRecursiveProps = {
     content: ContentItem 
     onContentChange: (
@@ -134,6 +137,48 @@ const ContentRenderer: React.FC<MasterRecursiveProps> = React.memo(({
               )
              }
              return null
+          case 'image': 
+           return (
+            <motion.div
+            {...animationProps} 
+            className='w-full h-full'
+            >
+             <CustomImage
+  src={content.content as string}
+  alt={content.alt || 'image'}
+  className={content.className}
+  isPreview={isPreview}
+  contentId={content.id}
+  onContentChange={onContentChange}
+  isEditable={isEditable}
+/>
+            </motion.div>
+           )
+
+           case 'blockquote': 
+           return (
+            <motion.div
+            {...animationProps}
+            className={cn('w-full h-full flex flex-col', content.className)}
+            >
+              <BlockQuote>
+                <Paragraph  {...commonProps}/>
+              </BlockQuote>
+              </motion.div>
+           )
+           case 'numberedList': 
+           return (
+            <motion.div
+            {...animationProps}
+            className={cn('w-full h-full')}
+            >
+              <NumberedList 
+              items={content.content as string[]}
+              onChange={(newItems) => onContentChange(content.id, newItems)} 
+              className={content.className}
+              />
+            </motion.div>
+           )
            case 'column' : 
            if (Array.isArray(content.content)) {
             return (
