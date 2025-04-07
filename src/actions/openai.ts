@@ -544,23 +544,148 @@ export const generateLayoutsJSON = async (outlineArray: string[]) => {
     const prompt = `You are a highly creative AI that generates JSON-based layouts for presentations. I will provide you with an array of outlines, and for each outline, you must generate a unique and creative layout. Use the existing layouts as examples for structure and design, and generate unique designs based on the provided outline.
 
 ### Guidelines:
+"twoColumnsWithHeadings", "threeColumns",
+"threeColumnsWithHeadings", "fourColumns", "twoImageColumns",
+"threeImageColumns", "fourImageColumns", "tableLayout".
+The available CONTENT TYPES are "heading1", "heading2",
+"heading3", "heading4", "title", "paragraph", "table",
+"resizable-column", "image", "blockquote", "numberedList",
+"bulletList", "todoList", "calloutBox", "codeBlock",
+"tableOfContents", "divider", "column"
 
-1. Write layouts based on the specific outline provided.
-2. Use diverse and engaging designs, ensuring each layout is unique.
-3. Adhere to the structure of existing layouts but add new styles or components if needed.
-4. Fill placeholder data into content fields where required.
-5. Generate unique image placeholders for the 'content' property of image components and also alt text according to the outline.
-6. Ensure proper formatting and schema alignment for the output JSON.
-
-### Example Layouts: 
-${JSON.stringify(existingLayouts, null, 2)}
-### Outline Array:
+Use these outlines as a starting point for the content of the
+presentations
 ${JSON.stringify(outlineArray)}
 
-For each entry in the outline array, generate:
-- A unique JSON layout with creative designs.
-- Properly filled content, including placeholders for image components.
-- Clear and well-structured JSON data.
+The output must be an array of JSON objects.
+1. Write layouts based on the specific outline provided. Do not
+   use types that are not mentioned in the example layouts.
+2. Ensuring each layout is unique.
+3. Adhere to the structure of existing layouts
+4. Fill placeholder data into content fields where required.
+5. Generate unique image placeholders for the 'content'
+   property of image components and also alt text according to the
+   outline.
+6. Ensure proper formatting and schema alignment for the output
+7. First create LAYOUTS TYPES at the top most level of the JSON output as follows 
+${JSON.stringify(
+  [
+   {
+    slideName: 'Blank card',
+    type: 'blank-card',
+    className: 'p-8 mx-auto flex justify-center items-center min-h-[200px]',
+    content: {},
+   }
+  ]
+)}
+
+8. The content property of each LAYOUTS TYPE should
+   start with "column" and within the columns content
+   property you can use any of the CONTENT TYPES I
+   provided above. Resizable-column, column and other
+   multi element contents should be an array because
+   you can have more elements inside them nested.
+   Static elements like title and paragraph should
+   have content set to a string. Here is an example of
+   what 1 layout with 1 column with 1 title inside
+   would look like:
+${JSON.stringify([
+  {
+      "slideName": "Blank card",
+      "type": "blank-card",
+      "className": "p-8 mx-auto flex justify-center items-center min-h-[200px]",
+      "content": {
+        "id": "uuidv4()",
+        "type": "column" as ContentType,
+        "name": "Column",
+        "content": [
+          {
+            "id": "uuidv4()",
+            "type": "title" as ContentType,
+            "name": "Title",
+            "content": "",
+            "placeholder": "Untitled Card"
+          }
+        ]
+      }
+    }
+])}
+9. Here is a final example of an example output
+for you to get an idea
+${JSON.stringify([
+{
+  id: uuidv4(),
+  slideName: 'Blank card',
+  type: 'blank-card',
+  className: 'p-8 mx-auto flex justify-center items-center min-h-[200px]',
+  content: {
+    id: uuidv4(),
+    type: 'column' as ContentType,
+    name: 'Column',
+    content: [
+      {
+        "id": "uuidv4()",
+        "type": "title" as ContentType,
+        "name": "Title",
+        "content": "",
+        "placeholder": "Untitled Card"
+      }
+    ]
+  }
+},
+{
+  "id": "uuidv4()",
+  "slideName": "Accent left",
+  "type": "accentLeft",
+  "className": "min-h-[300px]",
+  "content": {
+    "id": "uuidv4()",
+    "type": "column" as ContentType,
+    "name": "Column",
+    "restrictDropTo": true,
+    "content": [
+      {
+        "id": "uuidv4()",
+        "type": "resizable-column" as ContentType,
+        "name": "Resizable column",
+        "restrictDropTo": true,
+        "content": [
+          {
+            "id": "uuidv4()",
+            "type": "image" as ContentType,
+            "name": "Image",
+            "content": "https://images.unsplash.com/",
+            alt: 'Title',
+          },
+          {
+            "id": "uuidv4()",
+            "type": "column" as ContentType,
+            "name": "Column",
+            "content": [
+              {
+                "id": "uuidv4()",
+                "type": "heading1" as ContentType,
+                "name": "Heading1",
+                "content": "",
+                "placeholder": "Heading1"
+              },
+              {
+                "id": "uuidv4()",
+                "type": "paragraph" as ContentType,
+                "name": "Paragraph",
+                "content": "",
+                "placeholder": "start typing here"
+              },
+            ],
+            className: 'w-full h-full p-8 flex justify-center items-center',
+            placeholder: 'Heading1',
+          },
+        ],
+      },
+    ],
+  },
+},
+])}
 
 For Images
 - The alt text should describe the image clearly and concisely.

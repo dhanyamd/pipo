@@ -10,7 +10,7 @@ import TableComponent from './TableComponent'
 import ColumnComponent from './ColumnComponent'
 import CustomImage from './CustomImage'
 import BlockQuote from './BlockQuote'
-import NumberedList from './NumberedList'
+import NumberedList, { BulletList, TodoList } from './NumberedList'
 type MasterRecursiveProps = {
     content: ContentItem 
     onContentChange: (
@@ -173,6 +173,32 @@ const ContentRenderer: React.FC<MasterRecursiveProps> = React.memo(({
             className={cn('w-full h-full')}
             >
               <NumberedList 
+              items={content.content as string[]}
+              onChange={(newItems) => onContentChange(content.id, newItems)} 
+              className={content.className}
+              />
+            </motion.div>
+           )
+           case 'bulletList': 
+           return (
+            <motion.div
+            {...animationProps}
+            className={cn('w-full h-full')}
+            >
+              <BulletList 
+              items={content.content as string[]}
+              onChange={(newItems) => onContentChange(content.id, newItems)} 
+              className={content.className}
+              />
+            </motion.div>
+           )
+           case 'todoList': 
+           return (
+            <motion.div
+            {...animationProps}
+            className={cn('w-full h-full')}
+            >
+              <TodoList 
               items={content.content as string[]}
               onChange={(newItems) => onContentChange(content.id, newItems)} 
               className={content.className}
