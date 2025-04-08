@@ -11,6 +11,7 @@ import ColumnComponent from './ColumnComponent'
 import CustomImage from './CustomImage'
 import BlockQuote from './BlockQuote'
 import NumberedList, { BulletList, TodoList } from './NumberedList'
+import CalloutBox from './CalloutBox'
 type MasterRecursiveProps = {
     content: ContentItem 
     onContentChange: (
@@ -137,6 +138,20 @@ const ContentRenderer: React.FC<MasterRecursiveProps> = React.memo(({
               )
              }
              return null
+          case 'calloutBox' : 
+          return (
+            <motion.div
+            {...animationProps}
+            className='w-full h-full'
+            >
+              <CalloutBox 
+              type={content.callOutType || 'info'} 
+              className={content.className}
+              >
+                <Paragraph {...commonProps}/>
+              </CalloutBox>
+            </motion.div>
+          )
           case 'image': 
            return (
             <motion.div

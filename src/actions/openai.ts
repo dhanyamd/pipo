@@ -541,17 +541,25 @@ const findImageComponents = (layout: ContentItem): ContentItem[] => {
   }
 
 export const generateLayoutsJSON = async (outlineArray: string[]) => {
-    const prompt = `You are a highly creative AI that generates JSON-based layouts for presentations. I will provide you with an array of outlines, and for each outline, you must generate a unique and creative layout. Use the existing layouts as examples for structure and design, and generate unique designs based on the provided outline.
-
-### Guidelines:
+    const prompt = `You are a highly creative AI that generates JSON-based layouts
+     for presentations. I will provide you with a pattern and a format to follow, and for 
+     each outline, you must generate a unique layouts and contents and give me the output on the 
+     JSON formate expected. Our final JSON output is a combination of layouts
+and elements. The available LAYOUTS TYPES are as
+follows: "accentLeft", "accentRight",
+"imageAndText", "textAndImage", "twoColumns",
 "twoColumnsWithHeadings", "threeColumns",
-"threeColumnsWithHeadings", "fourColumns", "twoImageColumns",
-"threeImageColumns", "fourImageColumns", "tableLayout".
-The available CONTENT TYPES are "heading1", "heading2",
-"heading3", "heading4", "title", "paragraph", "table",
-"resizable-column", "image", "blockquote", "numberedList",
-"bulletList", "todoList", "calloutBox", "codeBlock",
+"threeColumnsWithHeadings", "fourColumns",
+"twoImageColumns", "threeImageColumns",
+"fourImageColumns", "tableLayout".
+The available CONTENT TYPES are "heading1",
+"heading2", "heading3", "heading4", "title",
+"paragraph", "table", "resizable-column", "image",
+"blockquote", "numberedList", "bulletList",
+"todoList", "calloutBox", "codeBlock",
 "tableOfContents", "divider", "column"
+
+
 
 Use these outlines as a starting point for the content of the
 presentations
