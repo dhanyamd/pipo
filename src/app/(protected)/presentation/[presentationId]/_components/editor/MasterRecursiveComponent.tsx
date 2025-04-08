@@ -12,6 +12,9 @@ import CustomImage from './CustomImage'
 import BlockQuote from './BlockQuote'
 import NumberedList, { BulletList, TodoList } from './NumberedList'
 import CalloutBox from './CalloutBox'
+import CodeBlock from './CodeBlock'
+import TableOfContent from './TableOfContent'
+import Divider from './Divider'
 type MasterRecursiveProps = {
     content: ContentItem 
     onContentChange: (
@@ -150,6 +153,44 @@ const ContentRenderer: React.FC<MasterRecursiveProps> = React.memo(({
               >
                 <Paragraph {...commonProps}/>
               </CalloutBox>
+            </motion.div>
+          )
+          case 'codeBlock': 
+          return (
+            <motion.div
+            {...animationProps} 
+            className='h-full w-full'
+            >
+              <CodeBlock 
+              code={content.code}
+              language={content.language} 
+              onChange={() => {}} 
+              className={content.className}
+              />
+            </motion.div>
+          )
+          case 'tableOfContents' : 
+          return (
+            <motion.div 
+            {...animationProps} 
+            className='w-full h-full'
+            >
+              <TableOfContent 
+              items={content.content as string[]} 
+              onItemClick={(id) => {
+                console.log(`Navigate to section: ${id}`)
+              }}
+              className={content.className}
+              />
+            </motion.div>
+          )
+          case 'divider': 
+          return (
+            <motion.div
+            {...animationProps} 
+            className='w-full h-full'
+            >
+              <Divider className={content.className as string}/>
             </motion.div>
           )
           case 'image': 
