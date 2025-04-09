@@ -4,7 +4,6 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { LayoutSlides, Slide } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import { useSlidesStore } from '@/store/useSlideStore'
-import { NavigationMenuViewportProps } from '@radix-ui/react-navigation-menu'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useDrag, useDrop } from 'react-dnd'
 import {v4 as uuid4} from 'uuid'
@@ -35,7 +34,7 @@ export const DropZone: React.FC<DropZoneProps> = ({
     onDrop,
    isEditable
 }) => {
-    const [{ canDrop, isOver}] = useDrop({
+    const [{ canDrop, isOver}, dropRef] = useDrop({
         accept: ['SLIDE', 'layout'],
         drop: (item: {
             type: string 
@@ -54,7 +53,9 @@ export const DropZone: React.FC<DropZoneProps> = ({
 
     if (!isEditable) return null 
    return (
-    <div className={cn(
+    <div 
+    ref={dropRef as unknown as React.RefObject<HTMLDivElement>}    
+    className={cn(
         'h-4 my-2 rounded-md transition-all duration-200',
         isOver && canDrop ? 'border-green-500 bg-green-100' : 'border-gray-300',
         canDrop ? 'border-blue-300' : ''
@@ -281,6 +282,11 @@ const Editor = ({isEditable} : Props) => {
                             handleDelete={handleDelete}
                             isEditable={isEditable}
                             />
+                              {isEditable && (<DropZone 
+                    index={index + 1}
+                    onDrop={handleDrop} 
+                    isEditable={isEditable}
+                    />)}
                         </React.Fragment>
                     ))}
                 </div>
