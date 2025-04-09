@@ -529,6 +529,7 @@ const findImageComponents = (layout: ContentItem): ContentItem[] => {
   `
     const dalleResponse = await openai.images.generate({
         prompt: improvedPrompt,
+        model: "dall-e-3",
         n: 1,
         size: '1024x1024'
     })

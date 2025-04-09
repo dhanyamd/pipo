@@ -5,13 +5,14 @@ import { LayoutSlides, Slide } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import { useSlidesStore } from '@/store/useSlideStore'
 import { NavigationMenuViewportProps } from '@radix-ui/react-navigation-menu'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useDrag, useDrop } from 'react-dnd'
 import {v4 as uuid4} from 'uuid'
 import {MasterRecursiveComponent} from './MasterRecursiveComponent'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Button } from '@/components/ui/button'
 import { EllipsisVertical, Trash } from 'lucide-react'
+import { updateSlides } from '@/actions/projects'
 type Props = {
     isEditable: boolean 
 }
@@ -92,6 +93,24 @@ export const DraggableSlide: React.FC<DraggableSlideProps> = ({
         }),
         canDrag: isEditable
     })
+    const [_, drop] = useDrop({
+        accept: ['SLIDE', 'LAYOUT'],
+        hover(item: {index: number; type: string}) {
+            if (!ref.current || !isEditable) {
+                return
+            }
+            const dragIndex = item.index 
+            const hoverIndex = index
+            if (item.type === 'SLIDE') {
+                if (dragIndex === hoverIndex) {
+                    return
+                }
+                moveSlide(dragIndex, hoverIndex) 
+                item.index = hoverIndex
+            }
+        }
+    })
+    drag(drop(ref))
     const handleContentChange = (contentId: string, newContent: string | string[] | string[][]) => {
         console.log('Content changed', slide, contentId, newContent)
         if (isEditable) {
@@ -165,6 +184,7 @@ const Editor = ({isEditable} : Props) => {
     const orderedSlides = getOrderedSlides()
     const [loading, setLoading]= useState(true)
     const slideRefs = useRef<(HTMLDivElement | null)[]>([])
+    const autisaveTimeoutRef = useRef<NodeJS.Timeout | null>(null)
     const moveSlide = (dragIndex: number, hoverIndex: number) => {
         if (isEditable) {
             reorderSlides(dragIndex, hoverIndex)
@@ -208,6 +228,34 @@ const Editor = ({isEditable} : Props) => {
     useEffect(() => {
         if (typeof window!== "undefined") setLoading(false)
     }, [])
+   const savelSlides = useCallback(() => {
+    if (isEditable && project) {
+        ;(async () => {
+            await updateSlides(project.id, JSON.parse(JSON.stringify(slides)))
+        })()
+    }
+   },[isEditable, project, slides])
+    useEffect(() => {
+     // using throttling 
+     // if() we already have a timer? cancel timer and create new one
+     if (autisaveTimeoutRef.current) {
+        clearTimeout(autisaveTimeoutRef.current)
+     } 
+     //inside the timer make the save request 
+
+     if (isEditable) {
+        autisaveTimeoutRef.current = setTimeout(() => {
+          savelSlides()
+        }, 2000)
+     }
+     //cleanup
+     return () => {
+        if (autisaveTimeoutRef.current) {
+            clearTimeout(autisaveTimeoutRef.current)
+        }
+     }
+
+    },[slides, isEditable, project])
   return (
     <div className='flex-1 flex flex-col h-full max-w-3xl mx-auto px-4 mb-20'>
         {loading ? (
