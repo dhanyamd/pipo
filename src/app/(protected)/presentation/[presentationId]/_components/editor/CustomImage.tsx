@@ -33,8 +33,9 @@ const CustomImage = ({
             className={`object-cover w-full h-full rounded-lg ${className}`}
           />
           {!isPreview && isEditable && <div
-           className='absolute top-0 lefy-0 hidden group-hover:block'>
+           className='absolute top-0 left-0 hidden group-hover:block'>
             <UploadImage contentId={contentId} onContentChange={onContentChange}/>
+            Upload image
             </div>}
         </div>
       );
