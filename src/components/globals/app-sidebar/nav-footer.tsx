@@ -13,6 +13,14 @@ const NavFooter = ({prismaUser} : {prismaUser: User}) => {
     if (!isLoaded || !isSignedIn) {
         return null
     }
+    const handleUpgrading = async() => {
+        setLoading(false)
+        try {
+            const res = await buySubscription(prismaUser.id)
+        } catch (error) {
+            
+        }
+    }
   return (
   <SidebarMenu>
     <SidebarMenuItem>
@@ -33,7 +41,7 @@ const NavFooter = ({prismaUser} : {prismaUser: User}) => {
          hover:bg-background-90 text-primary rounded-full font-bold'
         variant={'default'}
         size={'lg'}
-       // onClick={}
+        onClick={handleUpgrading}
         >
         {loading ? 'Upgrading...' : 'Upgrade'}
         </Button>
