@@ -10,6 +10,7 @@ import AlertDialogBox from '../alert-dialog'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
 import { deleteProject, recoverProject } from '@/actions/projects'
+import { Theme } from '@/lib/types'
 type Props = {
     projectId: string
     title: string 

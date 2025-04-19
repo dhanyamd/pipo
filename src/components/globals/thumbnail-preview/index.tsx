@@ -11,10 +11,10 @@ const ThumbnailPreview = ({slide, theme} : Props) => {
     <div 
     className={cn('w-full relative aspect-[16/9] rounded-lg overflow-hidden transition-all duration-200 p-2')}
     style={{
-        fontFamily: theme.fontFamily,
-        color: theme.accentColor,
-        backgroundColor: theme.slideBackgroundColor,
-        backgroundImage: theme.gradientBackground
+      fontFamily: theme.fontFamily,
+      color: theme.accentColor,
+      backgroundColor: theme.slideBackgroundColor,
+      backgroundImage: theme.gradientBackground
     }}
     >
       {slide ? (
@@ -22,6 +22,7 @@ const ThumbnailPreview = ({slide, theme} : Props) => {
         <MasterRecursiveComponent 
         slideId={slide.id} 
         content={slide.content} 
+        //WIP
         onContentChange={() => {}} 
         isPreview={true}
         />

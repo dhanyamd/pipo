@@ -1,6 +1,7 @@
+'use server'
 import lemonSqueezyClient from "@/lib/axios"
 
-export const buySubscription = async (buysUserId: string) => {
+export const buySubscription = async (buyUserId: string) => {
     try {
         const res = await lemonSqueezyClient(
             process.env.LEMON_SQUEEZY_API_KEY
@@ -10,7 +11,7 @@ export const buySubscription = async (buysUserId: string) => {
                 attributes: {
                     checkout_data: {
                         custom: {
-                            buyUserId: buysUserId
+                            buyerUserId: buyUserId
                         },
                     },
                     product_options: {

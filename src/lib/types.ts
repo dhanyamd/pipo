@@ -99,7 +99,7 @@ export interface Theme {
   sidebarColor?: string;
   navbarColor?: string;
   type: 'light' | 'dark';
-}
+}[]
 
 
 
