@@ -7,6 +7,7 @@ import { JsonValue } from '@prisma/client/runtime/library'
 import { useRouter } from 'next/navigation'
 import React from 'react'
 import { toast } from 'sonner'
+import { fixContentIds } from '@/lib/utils'
 type Props = {
     recentProjects: Projects[]
 }
@@ -20,7 +21,9 @@ const RecentOpen = ({ recentProjects} : Props) => {
         })
         return 
       }
-      setSlides(JSON.parse(JSON.stringify(slides)))
+      // Fix any "uuidv4()" string IDs in existing data
+      const fixedSlides = fixContentIds(JSON.parse(JSON.stringify(slides)))
+      setSlides(fixedSlides)
       router.push(`/presentation/${projectId}`)
     }
   return recentProjects.length > 0 ? (

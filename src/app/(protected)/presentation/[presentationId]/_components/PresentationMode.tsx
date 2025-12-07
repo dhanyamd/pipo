@@ -40,13 +40,15 @@ const PresentationMode = ({onClose} : Props) => {
         return () => window.removeEventListener('keydown', handleKeyDown)
     },[slides.length, currentSlideIndex])
   return (
-    <div className='fixed bg-black flex items-center justify-center z-50'
-    style={{
+    <div className='fixed inset-0 bg-black flex items-center justify-center z-[9999]'>
+      <div 
+      className='w-full h-full flex items-center justify-center'
+      style={{
         aspectRatio: '16/9',
         maxHeight: '100vh',
         maxWidth: '177.78vh'
-    }}
-    >
+      }}
+      >
       <AnimatePresence mode='wait'>
         <motion.div
         key={currentSlideIndex} 
@@ -54,7 +56,7 @@ const PresentationMode = ({onClose} : Props) => {
         animate={{ opacity:1, scale: 1}}
         exit={{opacity: 0, scale: 1.2}}
         transition={{ duration: 0.5 }} 
-        className={`w-full h-full pointer-events-none ${slides[currentSlideIndex].className}`}
+        className={`w-full h-full pointer-events-none p-8 ${slides[currentSlideIndex]?.className || ''}`}
         style={{
             backgroundColor: currentTheme.slideBackgroundColor,
             backgroundImage: currentTheme.gradientBackground,
@@ -63,14 +65,15 @@ const PresentationMode = ({onClose} : Props) => {
         }}
         >
             <MasterRecursiveComponent 
-            content={slides[currentSlideIndex].content} 
+            content={slides[currentSlideIndex]?.content} 
             onContentChange={() => {}} 
-            slideId={slides[currentSlideIndex].id} 
+            slideId={slides[currentSlideIndex]?.id || ''} 
             isPreview={false} 
             isEditable={false}
             />
         </motion.div>
       </AnimatePresence>
+      </div>
       <Button 
       variant="ghost" 
       size="icon" 

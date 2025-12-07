@@ -16,7 +16,7 @@ const LayoutPreview = (props: Props) => {
     if (typeof window !== "undefined") setLoading(false)
   },[])
   return (
-    <div className='w-72 full fixed left-0 top-20 border-r overflow-y-auto'>
+    <div className='w-72 fixed left-0 top-20 bottom-0 border-r'>
       <ScrollArea
       className='h-full w-full'
       suppressHydrationWarning

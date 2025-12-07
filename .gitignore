@@ -12,7 +12,7 @@
 
 # testing
 /coverage
-
+/src/actions/openai.ts
 # next.js
 /.next/
 /out/

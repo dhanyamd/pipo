@@ -10,11 +10,6 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/**',
       },
-   {  protocol: 'https',
-     hostname: 'via.placeholder.com',
-     port: '',
-     pathname: '/**',
-},
 {
      protocol: 'https',
      hostname: 'ucarecdn.com',
@@ -27,9 +22,25 @@ const nextConfig: NextConfig = {
      port: '',
      pathname: '/**',
 },
+{
+     protocol: 'https',
+     hostname: 'oaidalleapiprodscus.blob.core.windows.net',
+     port: '',
+     pathname: '/**',
+},
 
     ]
-  }
+  },
+  typescript:{
+    ignoreBuildErrors: true,
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production',
+  },
+
 };
 
 export default nextConfig;

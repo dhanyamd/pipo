@@ -31,15 +31,15 @@ const createHeading = (displayName: string, defaultClassName: string) => {
                 <textarea
                 className={cn(
                     `w-full bg-transparent ${defaultClassName} ${previewClassName} font-normal text-gray-900 placeholder:text-gray-300 focus:outline-none 
-                   resize-none overflow-hidden leading-tight`, className
+                   resize-none overflow-hidden`, className
                 )}
                 style={{
-                    padding: 0,
-                    margin:0,
+                    padding: isPreview ? '0.25rem 0' : '0.5rem 0',
+                    margin: 0,
                     color: 'inherit',
-                    boxSizing: 'content-box',
-                    lineHeight: '1.2rem',
-                    minHeight: '1.2rem',
+                    boxSizing: 'border-box',
+                    lineHeight: isPreview ? '1.3' : '1.4',
+                    minHeight: isPreview ? '1.3em' : '1.4em',
                     ...styles
                 }}
                 ref={(el) => {

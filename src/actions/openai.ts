@@ -5,13 +5,14 @@ import { ContentItem, ContentType, Slide } from "@/lib/types";
 import { currentUser } from "@clerk/nextjs/server";
 import OpenAI from "openai";
 import {v4 as uuidv4} from "uuid"
+import { fixContentIds } from "@/lib/utils"
 
 const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY
+    apiKey: process.env.OPENAI_API_KEY || ''
 })
 export const generateCreativePrompt = async (userPrompt: string) => {
   const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY
+    apiKey: process.env.OPENAI_API_KEY || ''
   })
                 const finalPrompt = `
                                  Create a coherent and relevant outline for the following
@@ -38,7 +39,7 @@ export const generateCreativePrompt = async (userPrompt: string) => {
                                  `
             try {
                 const completion = await openai.chat.completions.create({
-                    model: 'chatgpt-4o-latest',
+                    model: 'gpt-4o',
                     messages: [
                         {
                             role: 'system',
@@ -510,7 +511,7 @@ const findImageComponents = (layout: ContentItem): ContentItem[] => {
     return images
   }
 
-  const generateImageUrl = async (prompt: string): Promise<string>=> {
+  const generateImageUrl = async (prompt: string): Promise<string> => {
     try {
       const improvedPrompt = `
   Create a highly realistic, professional image based on the following description. The image should look as if captured in real life, with attention to detail, lighting, and texture.
@@ -534,12 +535,13 @@ const findImageComponents = (layout: ContentItem): ContentItem[] => {
         size: '1024x1024'
     })
     console.log('🟢Image generated successfully:', dalleResponse.data[0].url)
-    return dalleResponse.data[0]?.url || 'https://via.placeholder.com/1024'
+    return dalleResponse.data[0]?.url || 'https://placehold.co/1024x1024/cccccc/666666?text=Image+Not+Available'
     } catch (error) {
       console.error('Failed to generate image:', error)
-      return 'https://via.placeholder.com/1024'
+      return 'https://placehold.co/1024x1024/cccccc/666666?text=Image+Not+Available'
     }
   }
+
 
 export const generateLayoutsJSON = async (outlineArray: string[]) => {
     const prompt = `You are a highly creative AI that generates JSON-based layouts
@@ -604,12 +606,12 @@ ${JSON.stringify([
       "type": "blank-card",
       "className": "p-8 mx-auto flex justify-center items-center min-h-[200px]",
       "content": {
-        "id": "uuidv4()",
+        "id": uuidv4(),
         "type": "column" as ContentType,
         "name": "Column",
         "content": [
           {
-            "id": "uuidv4()",
+            "id": uuidv4(),
             "type": "title" as ContentType,
             "name": "Title",
             "content": "",
@@ -633,7 +635,7 @@ ${JSON.stringify([
     name: 'Column',
     content: [
       {
-        "id": "uuidv4()",
+        "id": uuidv4(),
         "type": "title" as ContentType,
         "name": "Title",
         "content": "",
@@ -643,43 +645,43 @@ ${JSON.stringify([
   }
 },
 {
-  "id": "uuidv4()",
+  "id": uuidv4(),
   "slideName": "Accent left",
   "type": "accentLeft",
   "className": "min-h-[300px]",
   "content": {
-    "id": "uuidv4()",
+    "id": uuidv4(),
     "type": "column" as ContentType,
     "name": "Column",
     "restrictDropTo": true,
     "content": [
       {
-        "id": "uuidv4()",
+        "id": uuidv4(),
         "type": "resizable-column" as ContentType,
         "name": "Resizable column",
         "restrictDropTo": true,
         "content": [
           {
-            "id": "uuidv4()",
+            "id": uuidv4(),
             "type": "image" as ContentType,
             "name": "Image",
             "content": "https://images.unsplash.com/",
             alt: 'Title',
           },
           {
-            "id": "uuidv4()",
+            "id": uuidv4(),
             "type": "column" as ContentType,
             "name": "Column",
             "content": [
               {
-                "id": "uuidv4()",
+                "id": uuidv4(),
                 "type": "heading1" as ContentType,
                 "name": "Heading1",
                 "content": "",
                 "placeholder": "Heading1"
               },
               {
-                "id": "uuidv4()",
+                "id": uuidv4(),
                 "type": "paragraph" as ContentType,
                 "name": "Paragraph",
                 "content": "",
@@ -727,6 +729,8 @@ try {
     let jsonResponse 
     try {
         jsonResponse = JSON.parse(responseContent.replace(/```json|```/g, ''))
+        // Fix any "uuidv4()" string IDs and ensure all IDs are unique
+        jsonResponse = fixContentIds(jsonResponse)
         await Promise.all(jsonResponse.map(replaceImagePlaceholders))
     } catch(error) {
         console.log('🔴 ERROR:', error) 

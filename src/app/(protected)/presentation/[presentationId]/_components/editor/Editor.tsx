@@ -133,7 +133,7 @@ export const DraggableSlide: React.FC<DraggableSlideProps> = ({
          style={{ backgroundImage: currentTheme.gradientBackground}}
          onClick={() => setCurrentSlide(index)}
         >
-            <div className='h-full w-full flex-grow overflow-hidden'>
+            <div className='h-full w-full flex-grow overflow-hidden p-6'>
                 <MasterRecursiveComponent 
                 content={slide.content}
                 isPreview={false}
@@ -211,7 +211,7 @@ const Editor = ({isEditable} : Props) => {
         if (item.type === 'layout') {
             addSlideAtIndex({
                 ...item.component,
-                id: uuid4(),
+                id: uuid4() || 'new-slide',
                 slideOrder: dropIndex
             }, dropIndex )
         } else if (item.type === 'SLIDE' && item.index !== undefined) {

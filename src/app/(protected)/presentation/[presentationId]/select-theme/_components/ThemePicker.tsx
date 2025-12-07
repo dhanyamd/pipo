@@ -9,6 +9,7 @@ import { Loader2, Wand2 } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import { toast } from 'sonner'
+import { fixContentIds } from '@/lib/utils'
 type Props = {
     selectedTheme: Theme 
     themes: Theme[]
@@ -45,7 +46,9 @@ const ThemePicker = ({onThemeSelect, selectedTheme, themes} : Props) => {
           description: 'Layouts generated successfully',
         })
         router.push(`/presentation/${project?.id}`)
-        setSlides(res.data)
+        // Fix any "uuidv4()" string IDs (should already be fixed, but be safe)
+        const fixedSlides = fixContentIds(res.data)
+        setSlides(fixedSlides)
       } catch (error) {
         toast.error('Error', {
           description: 'Please create a project'

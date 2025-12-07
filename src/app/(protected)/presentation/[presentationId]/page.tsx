@@ -13,11 +13,12 @@ import Navbar from './_components/Navbar'
 import LayoutPreview from './_components/editor-sidebar/leftsidebar/LayoutPreview'
 import Editor from './_components/editor/Editor'
 import EditorSidebar from './_components/RighSidebar/tabs'
+import { fixContentIds } from '@/lib/utils'
 type Props = {}
 const Page = (props : Props) => {
     const params = useParams()
     const {setTheme} = useTheme()
-    const [isLoading, setIsLoading] = useState(true) 
+    const [isLoading, setIsLoading] = useState(false) 
     const {setSlides, setProject, currentTheme, setCurrentTheme, slides} = useSlidesStore()
     useEffect(() => {
       (async () => {
@@ -33,7 +34,9 @@ const Page = (props : Props) => {
             setCurrentTheme(findTheme || themes[0])
             setTheme(findTheme?.type === 'dark' ? 'dark' : 'light')
             setProject(res.data)
-            setSlides(JSON.parse(JSON.stringify(res.data.slides)))
+            // Fix any "uuidv4()" string IDs in existing data
+            const fixedSlides = fixContentIds(JSON.parse(JSON.stringify(res.data.slides)))
+            setSlides(fixedSlides)
         } catch (error) {
             toast.error('Error', {
                 description: 'An unexpected error occured'
@@ -50,8 +53,8 @@ const Page = (props : Props) => {
             </div>
         )
     }
-  return <DndProvider backend={HTML5Backend}>
-    <div className='min-h-screen flex flex-col'>
+ return <DndProvider backend={HTML5Backend}>
+     <div className='min-h-screen flex flex-col'>
         <Navbar presentationId={params.presentationId as string}/>
         <div 
         className='flex-1 flex overflow-hidden pt-16'

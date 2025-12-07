@@ -58,7 +58,7 @@ isPreview
                   minSize={20}
                   defaultSize={100 / columns.length}
                 >
-                  <div className={cn('h-full w-full', item.className)}>
+                  <div className={cn('h-full w-full p-4', item.className)}>
                     <MasterRecursiveComponent 
                     content={item} 
                     isPreview={isPreview}

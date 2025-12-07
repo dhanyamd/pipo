@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
 import { deleteProject, recoverProject } from '@/actions/projects'
 import { Theme } from '@/lib/types'
+import { fixContentIds } from '@/lib/utils'
 type Props = {
     projectId: string
     title: string 
@@ -25,7 +26,9 @@ const [loading, setLoading] = useState(false)
 const [open, setOpen] = useState(false)
   const {setSlides} = useSlidesStore()
     const handleNavigation = () => {
-      setSlides(JSON.parse(JSON.stringify(slideData)))
+      // Fix any "uuidv4()" string IDs in existing data
+      const fixedSlides = fixContentIds(JSON.parse(JSON.stringify(slideData)))
+      setSlides(fixedSlides)
       router.push(`/presentation/${projectId}`)
   }
   const theme = themes.find((theme) => theme.name === themeName)
